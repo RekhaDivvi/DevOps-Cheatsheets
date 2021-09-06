@@ -124,6 +124,7 @@ No permissions |  | 0
     chmod u=w file1       Replace existing permissions with new permissions (For suppose owner has rwx permissions and you want to replace with only write permission then you                             can use this)
   
 **11.2. Types of ownership:** 
+  
 owner | Notation
 ----- | --------
 User | u
@@ -133,7 +134,9 @@ Others | o
 "chown" command is used to change the user and/or group that owns a file/folder.
 
 **Syntax:**  chown USER:GROUP <File/Folder name>
+  
 **Ex:**
+  
     Both user & group:   chown dave:mary example.txt
     Only user:           chown dave: example.txt
     Only group:          chown :mary example.txt
