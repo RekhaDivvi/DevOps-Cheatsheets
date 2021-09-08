@@ -60,8 +60,13 @@ Note:
 
 dockerd command is used to run daemon while docker commands are the client commands that are used by an user to interact with docker.
 
+### 7. What is docker socket file?
+- It is used to communicate with the main Docker daemon by the Docker API and the Docker CLI to execute Docker commands. This socket can also be used to communicate with the daemon from within a container. 
+- The Docker daemon can listen for Docker Engine API requests via three different types of Socket: unix , tcp , and fd . By default, a unix domain socket (or IPC socket) is created at /var/run/docker. sock , requiring either root permission, or docker group membership.
+- A lot of Service Meshes like Consul, and System Monitoring Services like Newrelic and DataDog ask to mount /var/run/docker.sock to collect container information. For example, on DataDog the dd-agent user must have permissions to access the docker.sock to get real time logs that are indexed by default.
 
-### 7. Explain the following Docker objects:
+
+### 8. Explain the following Docker objects:
 **1) Dockerfile &emsp;&emsp; 2) image &emsp;&emsp; 3) Container &emsp;&emsp; 4) network &emsp;&emsp; 5) volume**
 
 **`1) DockerFile:`** DockerFile is a configuration file with build instructions for docker images
@@ -81,14 +86,14 @@ When you install docker, it creates folder structure at /var/lib/docker. This is
 ![image](https://user-images.githubusercontent.com/43535914/129155805-c82ae744-8f6e-4d72-b164-3d0945a396ca.png)
 
 
-### 8. Is it possible to run windows container on top of linux host and viceversa?
+### 9. Is it possible to run windows container on top of linux host and viceversa?
 Docker containers share the underlying kernel of host OS. Docker can run any flavor of OS on top of it as long as they are all based on the same kernel. Let’s say you have a system with an Ubuntu OS with Docker installed on it. This means docker can run a container based on distribution like debian, fedora, suse or centos. But you won’t be able to run a windows container on a Docker host with Linux OS as linux kernel doesn't support windows. For that you would require docker on a windows server. But you can run linux containers on top of windows OS.
 
 *Not being able to run another kernel on the OS? Isn’t that a disadvantage?*
 
 The answer is No! Because unlike hypervisors, Docker is not meant to virtualize and run different Operating systems and kernels on the same hardware. The main purpose of Docker is to containerize applications and to ship them and run them.
 
-### 9. Explain the following:
+### 10. Explain the following:
 **1) Namespace &emsp;&emsp; 2) cgroups &emsp;&emsp; 3) Union file system**
 
 One host can run multiple containers with a degree of isolation maintained between the containers using namespaces and control groups behind the scene.
@@ -122,7 +127,7 @@ Docker operate by creating layers, making them very lightweight and fast. It all
 ![image](https://user-images.githubusercontent.com/43535914/129241810-0062287b-21fa-4891-861e-d03445e7bab3.png)
 
 
-### 10. How do you manage docker as a non-root user?
+### 11. How do you manage docker as a non-root user?
 By default docker daemon always runs as a root user. ie., if you run any docker command without sudo it results in permission denied error.
 If you want to run commands without sudo, first create a docker group.
 
@@ -133,7 +138,7 @@ The docker group grants privileges equivalent to the root user. Now add your use
     
 Once done logout and login back to get this group membership replicated.
 
-### 11. Explain the following Docker terminologies:
+### 12. Explain the following Docker terminologies:
 **1) Registry &emsp;&emsp; 2) Repository**
 
 **`1) Registry:`** Registry is a service responsible for hosting and distributing images. A registry is a collection of repositories. The default registry for Docker is **DockerHub**. You can also set your own “private and trusted” registry (Ex: Harbor) or cloud based registries like AWS Container Registry, Azure container registry, etc.
@@ -151,7 +156,7 @@ User repositories take form of `username/repo-name:tag` where as top level repos
      To pull official nginx image from Docker Hub - docker pull nginx:1.21
 
 
-### 12. Explain basic workflow of Docker?
+### 13. Explain basic workflow of Docker?
 ![image](https://user-images.githubusercontent.com/43535914/129311935-d42ec4b2-9689-46e2-bbb4-1ce6bfb67757.png)
 
 We will never deploy an application directly as a container. We first deploy our application as an image then we run the image to get a container. Docker will run containers from locally available images. If the image is not available locally then the docker engine first downloads the image on to the host from the configured registry(Ex: DockerHub, Harbor, etc) and then run containers from it.
@@ -162,7 +167,7 @@ Image can be created using three ways:
 -  Using docker commit message and convert to convert a container into an image.
 
 
-### 13. Explain networking in Docker
+### 14. Explain networking in Docker
 here are three default networks created on a host upon docker installation.
 - Bridge
 - Host
@@ -186,13 +191,13 @@ When we have multiple containers using same port on the same docker host, there 
 **`4) Overlay network:`**  An overlay network is a computer network that is built on top of another network and is used for communication between containers on different hosts. It is primarily used in the context of docker swarm.
 
 
-### 14. What happens when a docker container runs out of memory?
+### 15. What happens when a docker container runs out of memory?
 By default, if an out-of-memory (OOM) error occurs, the kernel kills processes in a container. To change this behavior, use the --oom-kill-disable option. Only disable the OOM killer on containers where you have also set the -m/--memory option. If the -m flag is not set, the host can run out of memory and the kernel may need to kill the host system’s processes to free memory.
 
-### 15. What happens when you run a Docker container from Ubuntu image?
+### 16. What happens when you run a Docker container from Ubuntu image?
 When you run a docker container from an Ubuntu image, it runs an instance of Ubuntu image and exits immediately. This is because containers are meant to run a specific task or process. Once the task is complete, the container exits. If you look at the docker file for ubuntu image, you will see that it uses bash as the default command. Now bash is not really a process. It is a shell that listens for inputs from a terminal, if it cannot find one it exits.
 
-### 16. How exactly docker stores the files of an image and a container?
+### 17. How exactly docker stores the files of an image and a container?
 **`Image layer:`** When docker builds images, it builds these in a layered architecture. Docker image layers are read-only. Once the build is complete, you cannot modify the contents and you can only modify them by initiating a new build. 
 
 **`Container top writable layer:`** Once a container is spun from an image, a writable layer gets created on top of the image layer. Writable layer is available in container, but not in image. The writable layer is used to store data created by the container such as application log files, temporary files generated by the container or any files modified by the user on that container. All writes to the container data are stored here and writable layer is deleted when the container gets deleted.
@@ -204,11 +209,11 @@ Can’t you modify the file in image layer?
 
 You can modify the file in image layer. But before you save the modified file, docker automatically creates a copy of the file in the read write layer and you will then be modifying a different version of the file in read write layer. All future modifications will be done on this copy of the file in the read-write layer. This is called copy on write mechanism. The image layer being read only just means that the files in these layers will not be modified in the image itself. So the image will remain the same all the time until you rebuild the image using the docker build command.
 
-### 17. Explain image layers?
+### 18. Explain image layers?
 
 A Docker image is built up from a series of layers. Each layer represents an instruction in the image’s Dockerfile. Each layer except the very last one is read-only. Each layer is only a set of differences from the layer before it. The layers are stacked on top of each other. When you create a new container, you add a new writable layer on top of the underlying layers. This layer is often called the “container layer”. All changes made to the running container, such as writing new files, modifying existing files, and deleting files, are written to this thin writable container layer. The major difference between a container and an image is the top writable layer. All writes to the container that add new or modify existing data are stored in this writable layer. When the container is deleted, the writable layer is also deleted. The underlying image remains unchanged. Because each container has its own writable container layer, and all changes are stored in this container layer, multiple containers can share access to the same underlying image and yet have their own data state.
 
-### 18. What happens to data of the container when a container exits? How do you persist container data?
+### 19. What happens to data of the container when a container exits? How do you persist container data?
 By default all files created inside a container are stored in the container itself. The data inside it does not persist (will be lost) when that container no longer exists (Unless of course, you save it as an image first). This is called persistent data problem. But you can add a persistent storage in order to preserve the container’s data.
      
 Below are different ways to mount data into a container:
@@ -246,7 +251,7 @@ Temporary one time password that the containers application creates and uses as 
 
 **`4. External (to host) storage:`** Enables data volumes to persist beyond the lifetime of a single Docker host. In case of external volumes even if the docker host goes down the data is not lost. Docker provides volume plugin which can be used for persistent data storage external to the host. While creating the volume using docker volume command we can specify the driver to be used. 
 
-### 19. What is the difference b/w volumes and bind mounts?
+### 20. What is the difference b/w volumes and bind mounts?
 
 Bind Mount | Volume
 ---------- | -------
@@ -255,7 +260,7 @@ Bind mount mounts a directory from any location on the docker host | Volume moun
 Bind mount cannot be used inside a dockerfile because that is not a hard core location on the host machine. | Volume can be used inside a dockerfile.
 Can't use Docker CLI commands to directly manage bind mounts. | In case of volumes we have commands like docker volume ls, rm, prune etc.
 
-### 20. Docker command syntax
+### 21. Docker command syntax
 Docker commands are universal (ie., which ever operating system you use, command remains the same) and case sensitive. Docker management commands are introduced in version 1.13.0
 
 ##### Docker management commands format:
@@ -282,7 +287,7 @@ Run a container | docker run | docker container run
 remove an image | docker rmi | docker image rm
 
 
-### 21. List of Docker commands
+### 22. List of Docker commands
 <details>
 <summary>Info related</summary><br> 
 
@@ -774,7 +779,7 @@ $ docker system prune
 </details>
     
 
-### 22. Dockerfile
+### 23. Dockerfile
 Dockerfile is a text document that contains a series of instructions paired with arguments. Each instruction should be in uppercase and instructions in the Dockerfile are processed from top to bottom.
 
 **`How to name Dockerfile:`** &emsp; The default filename is Dockerfile (without an extension), and using the default can make various tasks easier while working with containers. But you can name Dockerfile with any name like Dockerfile.dev, Dockerfile.prod, etc.   
@@ -810,7 +815,7 @@ Below is the sample Dockerfile that runs simple web application in Tomcat.
     ENV name test
 
      
-### 23. What is .dockerignore file?     
+### 24. What is .dockerignore file?     
 It allows you to specify a pattern for files and folders that should be ignored by the Docker client when generating a build context.     
 Before the docker CLI sends the context to docker daemon it looks for .dockerignore file in the root directory. It exclude files and directories that match patterns in this file. This helps to avoid unnecessarily sending files and directories to the daemon.
 
@@ -819,7 +824,7 @@ Before the docker CLI sends the context to docker daemon it looks for .dockerign
 .*		README*		*.yaml
 
      
-### 24. What are the best practices related to working with containers or Dockerfile?
+### 25. What are the best practices related to working with containers or Dockerfile?
 - Specify Image Tags for base image you use
 - Reduce build context: Build context is a set of files at either local path (directory on your file system) or a URL (git repository location) in the Dockerfile folder. When a build is run by Docker, first thing it does is send the Dockerfile and the entire context (recursively) to the daemon. When you issue a docker build command, the current working directory is called the build context. By default, the Dockerfile is assumed to be located here, but you can specify a different location with the file flag (-f). Regardless of where the Dockerfile actually lives, all recursive contents of files and directories in the current directory are sent to the Docker daemon as the build context. The best way is to put the Dockerfile inside the empty directory and then add only the application and configuration files required for building the docker image.
 - Use a .dockerignore file: To increase the build’s performance, you can exclude files and directories by adding a .dockerignore file to that directory as well.     
@@ -833,7 +838,7 @@ Before the docker CLI sends the context to docker daemon it looks for .dockerign
                          java
                      
 
-### 25. What is the differnce between CMD and ENTRYPOINT Docker instructions?     
+### 26. What is the differnce between CMD and ENTRYPOINT Docker instructions?     
 CMD sets default command and/or parameters, which can be overridden when command line parameters are passed when a docker container runs (CMD will be executed only when you run container without specifying a command/parameters), where as in case of ENTRYPOINT the command line parameters will get appended. In short, command and parameters of ENTRYPOINT are not ignored when Docker container runs with command line parameters.      
 
 Example of CMD:
@@ -870,7 +875,7 @@ You can also override the default executable by using the --entrypoint flag whil
     root@7de4bed89922:/#  
  
      
-### 26. What are multi-stage builds?
+### 27. What are multi-stage builds?
 With multi-stage builds, you use multiple FROM statements in your Dockerfile. Each FROM instruction can use a different base, and each of them begins a new stage of the build. For longer Dockerfiles, or just for clarity you can name the stages of the build using the AS command. You can selectively copy artifacts from one stage to another, leaving behind everything you don’t want in the final image.
 Multi-stage builds allow you to drastically reduce the size of your final image, without struggling to reduce the number of intermediate layers and files.     
 
@@ -892,7 +897,7 @@ Multi-stage builds allow you to drastically reduce the size of your final image,
      COPY src/ src
 
 
-### 27. Explain about Docker-compose:
+### 28. Explain about Docker-compose:
 Docker-compose is a tool for defining and running multi-container docker applications. In case of applications which follow micro services architecture you have multiple layers each providing a specific service. Each layer would have a different container running thereby making your application a multi-container application. Running one container at a time and configuring the required dependencies between the different layers would be difficult to do manually. For such purpose docker compose is useful. 
      
 In short, With Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration.
@@ -912,7 +917,7 @@ docker-compose down  --  To bring down entire services
 docker-compose -f xxx.yml up -d
  
 
-### 28. What is container orchestration?
+### 29. What is container orchestration?
 As the scale of operation increases it becomes nearly impossible to manage the entire infrastructure. Therefore the need of the orchestration arises. It provides automated configuration, coordination, and management of the backend servers, which collectively provide a Service. Container orchestration is the process of deploying and maintaining large number of containers and services for the application to run as intended. 
 
 Important responsibilities of Orchestration tools are:
@@ -925,16 +930,16 @@ Important responsibilities of Orchestration tools are:
 
 Few popular orchestration Engines are - Docker Swarm, Kubernetes and Apache Mesos/Marathon     
      
-### 29. What is Docker swarm?
+### 30. What is Docker swarm?
 Multi-container, multi-machine applications are made possible by joining machines into a dockerized cluster called as swarm. Docker swarm is a container orchestration tool, part of the docker engine. A swarm is a group of machines that are running docker and joined into a cluster. After joining a swarm they are referred to as nodes. Docker swarm allows you to deploy and manage a cluster of docker nodes (each of which running several container instances) as a single virtual system.
      
 Note:
 Docker swarm is basically idle for small scale applications. For large scale applications we prefer kubernetes.     
      
-### 30. Difference between docker compose and swarm
+### 31. Difference between docker compose and swarm
 Docker Swarm runs multi-container applications, just like Compose does. The key difference is that Swarm schedules and manages your containers across multiple machines, while Compose schedules and manages containers on a single host only.     
 
-### 31. Explain Docker swarm architecture?
+### 32. Explain Docker swarm architecture?
 
 ![image](https://user-images.githubusercontent.com/43535914/129487616-e7b793c6-b708-408b-a01c-302aeb13bec6.png)
 
@@ -951,7 +956,7 @@ Manager node   --  It manages all worker nodes. Manager node is responsible for:
      
 Worker node    --  They are responsible for checking assigned tasks and executing them.     
      
-### 32. Commands to build a docker swarm     
+### 33. Commands to build a docker swarm     
 Initializing a swarm with manager:
 
     docker swarm init --advertise-addr <manager-ip>  --  Initializes docker swarm with a manager. Any other node that gets added to this particular swarm becomes worker node. 
