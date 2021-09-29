@@ -38,10 +38,10 @@ Directory | Name | Description
 **/bin** | Essential User Binaries | Contains essential user binaries. Applications, programs, and commands that we use are located in this directory. <br> **Ex:** ps, ls, ping, grep, cp.
 **/sbin** | System Administration Binaries | It contains essential binaries that are generally intended to be run by the root user for system administration.
 **/lib** | Essential Shared Libraries | It holds the libraries needed by the binaries in /bin and /sbin directories.
-**/opt** | Optional Packages | Used for installing/storing the files of third-party applications that are not available from the distribution’s repository.
+**/opt** | Optional Packages | Add-on application software packages. Used for installing/storing the files of third-party applications that are not available from the distribution’s repository.
 **/dev** | Device Files | Stores device files. These include terminal devices, usb, or any device attached to the system. <br> **Ex:** /dev/tty1, /dev/usbmon0
 **/etc** | Configuration Files | Contains core configuration files. It controls the behavior of an operating system or application. This directory also contains startup and shutdown program scripts that are used to start or stop individual programs. <br> **Ex:** /etc/resolv.conf, /etc/logrotate.conf
-**/var** | Variable Files | This is where programs store runtime information like system log files (/var/log); packages and database files (/var/lib); emails (/var/mail); print queues (/var/spool); lock files (/var/lock); temp files needed across reboots (/var/tmp); etc <br> The files stored here are NOT cleaned automatically and hence it provides a good place for system administrators to look for information about their system behavior. <br> **Ex:** If you want to check the login history in your Linux system, just check the content of the file in /var/log/wtmp.
+**/var** | Variable Files | This is where programs store runtime information (i.e., files whose content is expected to continually change during normal operation of the system) like system log files (/var/log); packages and database files (/var/lib); emails (/var/mail); Spool for tasks waiting to be processed e.g., print queues and outgoing mail queue  (/var/spool); lock files, Files keeping track of resources currently in use (/var/lock); temp files needed across reboots (/var/tmp); etc <br> The files stored here are NOT cleaned automatically and hence it provides a good place for system administrators to look for information about their system behavior. <br> **Ex:** If you want to check the login history in your Linux system, just check the content of the file in /var/log/wtmp.
 **/boot** | Static Boot Files | Contains files needed to boot the system
 **/mnt** | Temporary Mount Points | Temporary mount directory for mounting file system
 **/lost+found** | Recovered Files | Same as "restore". Each Linux file system has a lost+found directory and is useful for recovering files which may be broken due to unexpected shut-down.
@@ -102,7 +102,7 @@ Permission | Alphabetical notation | Numerical notation
 Read |	r |	4
 Write	| w	| 2
 Execute	| x	| 1
-No permissions |  | 0   
+No permissions | - | 0   
 
 "chmod" command is used to change the read, write, and execute permissions of a file/folder.
 
@@ -145,7 +145,7 @@ Others | o
 A file type helps us in identifying the type of content that is saved in the file. Linux supports seven different types of files. 
 Symbol	| Type of file
 ------- | ------------
-\-	| Normal file
+\-	| Regular file
 b	| Block special file (Hard disk or floppy disk)
 c	| Character special file
 s | local socket file
@@ -600,7 +600,7 @@ Command	| Usage	| Description
 ------- | ----- | -----------
 ps	| ps -ef \| grep java (OR) ps -aux	| (Process Status) Displays a list of currently running processes along with process id’s (PID). <br> -e means Display all processes <br> -f means Display a full listing
 pstree |  |		Visualizing processes in tree model
-kill	| kill \<pid\>	| Kill process by using process id(pid)
+kill	| kill \<pid\>	| Kill process by using process id (pid)
 |  |	kill -9 \<pid\> |	Force kill a process. Internally it sends a signal, and depending on what you want to do. (-9 signal to kill)
 killall	| Killall proc	| lets you kill all processes named proc.
 top	 |   | The top ('table of processes') command displays list of all running processes, sorted by how much CPU each processes uses. Unlike ps, this command regularly updates in real-time. Basically a terminal equivalent to Task Manager. To exit top, press "q"
@@ -608,6 +608,17 @@ lsof |   |		Lists files that are open by processes
 fg	| fg \<Job_name\>	| Run a program in the foreground
 bg	|   |Run a service in background   
 
+**Signals**
+  
+In Linux, when killing a process, you send a signal to the process. All the signals below can be sent with the kill command, an example would be: kill -SIGSTOP 123 where 123 is the pid of the process.
+
+- SIGHUP - Send to the process when you close the terminal running it.
+- SIGINT - Sent when you press Ctrl+C. The process will attempt to shutdown gracefully.
+- SIGTERM - Can be sent with: kill <proccespid>. The process will attempt to shutdown gracefully.
+- SIGKILL - Can be sent with: kill -9 <proccespid> or. Kill the process right away, The kill will be handled by the kernel.
+- SIGSTOP - Sent when you press Ctrl+Z. The usual behaviour is to pause that process in its current state. The process will only resume execution if it is sent the SIGCONT signal.
+- SIGCONT - Continue a process that was stopped with SIGSTOP
+  
 </details> 
   
 <details>
