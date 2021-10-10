@@ -168,7 +168,7 @@ A pull request is a practice of having code changes reviewed by someone and gett
 ##### Local workflow:
 - Either create a new repository in the local system (git init) or clone existing repository (git clone) or pull latest changes if repository exists in local (git pull).
 - Create/modify/delete files in your working directory and save them as usual
-- Add snapshots of your changes files to your staging area
+- Select the modified files you want to Stage
 - Do a commit, which takes the files as they are in the staging area and permanently stores them as snapshots to your Git directory.
 - Connect the local repository to your remote repository and push the latest changes
 
