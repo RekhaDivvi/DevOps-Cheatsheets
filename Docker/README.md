@@ -22,7 +22,7 @@ Each VM has its own independent file system. |	Layered file system
 Support for monolithic architecture |	Support for micro services architecture.
 Running VM’s can be backed up.	| No need for backups. Application data lives in a volume which is shared between containers.
 VMs take more space as they include everything (in GBs) | 	Containers take very less space (Images are typically in tens of MBs). 
-VM’s have complete isolation from each other. Since VM’s don’t rely on the underlying OS, you can have different types of OS like windows or linux based on the same hypervisor | Docker has less isolation as more resources are shared are shared between the container like the kernel.
+VM’s have complete isolation from each other. Since VM’s don’t rely on the underlying OS, you can have different types of OS like windows or linux based on the same hypervisor | Docker has less isolation as more resources are shared between the container like the kernel.
 
 ### 4. In which scenarios would you use containers and in which you would prefer to use VMs?
 You should choose VMs when:
@@ -61,8 +61,8 @@ Note:
 dockerd command is used to run daemon while docker commands are the client commands that are used by an user to interact with docker.
 
 ### 7. What is docker socket file?
-- It is used to communicate with the main Docker daemon by the Docker API and the Docker CLI to execute Docker commands. This socket can also be used to communicate with the daemon from within a container. 
-- The Docker daemon can listen for Docker Engine API requests via three different types of Socket: unix , tcp , and fd . By default, a unix domain socket (or IPC socket) is created at /var/run/docker. sock , requiring either root permission, or docker group membership.
+- Docker socket file is used to communicate with the main docker daemon (process) by default. It is the entry point for a Docker API. This socket is used by Docker CLI by default to execute docker commands. 
+- The Docker daemon can listen for Docker Engine API requests via three different types of Socket: unix , tcp , and fd . By default, a unix domain socket (or IPC socket) is created at /var/run/docker.sock , requiring either root permission, or docker group membership.
 - A lot of Service Meshes like Consul, and System Monitoring Services like Newrelic and DataDog ask to mount /var/run/docker.sock to collect container information. For example, on DataDog the dd-agent user must have permissions to access the docker.sock to get real time logs that are indexed by default.
 
 
